@@ -9,7 +9,14 @@
   </svg>
 {% endblock %}
 {% block profile %}
-<a href="/profile/{{user.username}}" class="btn btn-outline-success"  ><h5>My Profile</h5></a>
+<div>
+  <a href="/profile/{{user.username}}" class="btn btn-outline-success"  ><h5>My Profile</h5></a>
+</div>
+<br>
+<div>
+  <a href="/create-post" class="btn btn-outline-success" type="button"><h4>Create a Post </h4></a >
+
+</div>
 {% endblock %}
 
 

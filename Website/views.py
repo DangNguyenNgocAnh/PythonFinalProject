@@ -62,6 +62,17 @@ def posts(username):
     return render_template("posts.html", user=current_user, posts=posts, username=username)
 
 
+@views.route("/post/<post_id>")
+@login_required
+def post(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    if not post:
+        flash("Post does not exist.", category='error')
+
+    return render_template('post.html', user= current_user, post= post)
+
+
+
 @views.route("/edit-post/<post_id>", methods = ['GET', 'POST'])
 @login_required
 def edit_post(post_id):
