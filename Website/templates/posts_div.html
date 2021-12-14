@@ -30,7 +30,7 @@
               {% for comment in post.comments %}
               <div class="d-flex justify-content-between align-items-center">
                 <div class="comment">
-                  <a href="/posts/{{comment.user.username}}"
+                  <a href="/profile/{{post.user.username}}"
                     >{{comment.user.username}}:</a>  
                     <span>{{comment.text}}</span>
                 </div>
