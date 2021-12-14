@@ -3,16 +3,14 @@ from . import db
 from .models import User
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import re
 auth = Blueprint("auth", __name__)
-
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
-
         user = User.query.filter_by(email=email).first()
         print(user.password)
         print(email)
@@ -32,6 +30,7 @@ def login():
 
 @auth.route("/sign-up", methods=['GET', 'POST'])
 def sign_up():
+    email_test="([a-zA-Z0-9-_]+@[a-zA-Z0-9]+[.][a-zA-Z]{1,3})"
     if request.method == 'POST':
         email = request.form.get("email")
         username = request.form.get("username")
@@ -41,7 +40,9 @@ def sign_up():
         email_exists = User.query.filter_by(email=email).first()
         username_exists = User.query.filter_by(username=username).first()
 
-        if email_exists:
+        if email=="" or username=="" or password1=="" or password2=="":
+            flash('Missing data. Please check !', category='error')
+        elif email_exists:
             flash('Email is already in use.', category='error')
         elif username_exists:
             flash('Username is already in use.', category='error')
@@ -51,8 +52,7 @@ def sign_up():
             flash('Username is too short.', category='error')
         elif len(password1) < 6:
             flash('Password is too short.', category='error')
-        elif len(email) < 4:
-            flash("Email is invalid.", category='error')
+
         else:
             new_user = User(email=email, username=username, password=password1)
             db.session.add(new_user)
@@ -65,8 +65,10 @@ def sign_up():
     return render_template("signup.html", user=current_user)
 
 
+
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("views.home"))
+    

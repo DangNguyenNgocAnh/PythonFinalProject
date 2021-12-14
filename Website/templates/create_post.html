@@ -1,19 +1,34 @@
 {% extends "base.html" %} 
-{% block title %}Home{% endblock %}
 {% block content%}
-  <h1 align="center">Make a Post</h1>
-  
+<h1 align="center">
+  {% block title%}
+  Make a Post
+  {% endblock %}
+</h1>
+<div class="posts">
   <form method="POST">
-    <textarea name="text" id="text" class="form-control"></textarea>
-    <br />
-    <div align="center">
-      <button type="submit" class="btn btn-lg btn-primary">Post</button>
+    <div class="flex">
+      <label for="title">Title:</label>
+    {% block texttitle %} 
+     <textarea name="title" id="title" class="form-control" rows="3"></textarea>
+    {% endblock %}
+    </div>
+    <br>
+    <div class="flex">
+      <label for="text">Text:</label>
+      {% block text %} 
+      <textarea name="text" id="text" class="form-control" rows="8"></textarea>
+      {% endblock %}
+
+    </div>
+    <div class="d-flex justify-content-around">
+    {%block btn%}  <button type="submit" class="btn btn-success"><h4>Post</h4></button>{%endblock%}
+      <a href="/home"
+        ><button type="button" class="btn btn-secondary"><h4>Back</h4></button></a
+      >
     </div>
   </form>
-  <br />
-  <div align="center">
-    <a href="/home"
-      ><button type="button" class="btn btn-lg btn-secondary">Back</button></a
-    >
-  </div>
+</div>
+  
+
   {% endblock %}

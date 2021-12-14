@@ -1,0 +1,32 @@
+{% extends "base.html" %} 
+{% block title %}Follow{% endblock %}
+{% block content %}
+<h1 align="center">{% block h1 %}Follow{% endblock %}</h1>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+        <th scope="col">STT</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Follower</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set i = namespace(value=0) %}
+        <tr>
+            <th scope="row">{{i.value}} </th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% set i.value = i.value + 1 %}
+    </tbody>
+</table>
+<div align="center">
+    <a href="/profile/{{user.username}}">
+        <button type="button" class="btn btn-outline-success"><h5>Back</h5></button>
+      </a>
+  </div>
+
+{% endblock %}

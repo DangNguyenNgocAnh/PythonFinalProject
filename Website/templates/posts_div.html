@@ -1,83 +1,42 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
   %}
   <h1 align="center">{% block header %}Posts{% endblock %}</h1>
-  <div id="posts">
+  <div align="right">
+    {% block profile %}{% endblock %}
+  </div>
+  {% block footer %}
+  <div >
+    <a href="/create-post"
+    <button class="btn btn-outline-success" type="button"><h4>    Create a Post
+    </h4></button>
+      </a >
+  </div>
+  {% endblock %}
+  <br>
+  <div  class="posts">
     {% for post in posts %}
     <div class="card border-dark">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <a href="/posts/{{post.user.username}}">{{post.user.username}}</a>
+        <a list-style = "none" class="" href="/profile/{{post.user.username}}">Author: {{post.user.username}}</a>
         <div>
           {{ post.likes|length }}
           {% if user.id in post.likes|map(attribute="author")|list %}
           <a href="/like-post/{{post.id}}"> 
-          <i
-            class="fas fa-thumbs-up" 
-          ></i>
+          <i class="fas fa-thumbs-up"></i>
         </a>
           {% else %}
           <a href="/like-post/{{post.id}}">
-            <i
-              class="far fa-thumbs-up"
-            ></i>
+            <i class="far fa-thumbs-up"></i>
            </a>
-          {% endif %}
-           {% if user.id == post.author %}
-          <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-sm btn-primary dropdown-toggle"
-              data-bs-toggle="dropdown"
-            ></button>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="/delete-post/{{post.id}}" class="dropdown-item"
-                  >Delete</a
-                >
-              </li>
-            </ul>
-          </div>
           {% endif %}
         </div>
       </div>
       <div class="card-body">
-        <div class="card-text">{{post.text}}</div>
-        <br />
-        <div class="collapse" id="comments-{{post.id}}">
-          <div class="card">
-            <div class="card-body" id="comments-expanded-{{post.id}}">
-              {% for comment in post.comments %}
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <a href="/posts/{{comment.user.username}}"
-                    >{{comment.user.username}}</a
-                  >: {{comment.text}}
-                </div>
-                <div>
-                  <small class="text-muted"> {{comment.date_created}}</small>
-                  {% if user.id == comment.author or user.id == post.author %}
-                  <div class="btn-group">
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-primary dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                    ></button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a
-                          href="/delete-comment/{{comment.id}}"
-                          class="dropdown-item"
-                          >Delete</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  {% endif %}
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
+        <div class="card-text">
+          <p class="post-title">{{post.title}}</p>
+          <p class="post-test">{{post.text}}</p>
         </div>
+        <br />
         <p class="card-text">
           {% if post.comments|length > 0 %}
           <a data-bs-toggle="collapse" href="#comments-{{post.id}}" role="button">
@@ -87,6 +46,33 @@
           <small class="text-muted">No Comments</small>
           {% endif %}
         </p>
+        <div class="collapse" id="comments-{{post.id}}">
+          <div class="card">
+            <div class="card-body-sm" id="comments-expanded-{{post.id}}">
+              {% for comment in post.comments %}
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="comment">
+                  <a href="/posts/{{comment.user.username}}"
+                    >{{comment.user.username}}:</a>  
+                    <span>{{comment.text}}</span>
+                </div>
+                <div>
+                  <small class="text-muted"> {{comment.date_created}}</small>
+                  {% if user.id == comment.author or user.id == post.author %}
+                  
+                  <a class="btn btn-outline-success" data-toggle="collapse" href="/delete-comment/{{comment.id}}" class="dropdown-item"
+                      ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                      </svg></a>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <br>
         <form
           class="input-group mb-3"
           method="POST"
@@ -99,19 +85,30 @@
             class="form-control"
             placeholder="Comment something!"
           />
-          <button type="submit" class="btn btn-primary">Comment</button>
+          <button class="btn btn-outline-success" type="submit"><h6>Comment</h6></button>
         </form>
       </div>
-      <div class="card-footer text-muted">{{post.date_created}}</div>
+      <div class="d-flex justify-content-between">
+        <div class="card-footer text-muted">
+          {{post.date_created}}
+        </div>
+        <div >
+          {% if user.id == post.author %}
+          <a class="btn btn-outline-success" data-toggle="collapse" href="/edit-post/{{post.id}}" class="dropdown-item"
+          ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+          </svg></a>
+            <a class="btn btn-outline-success" data-toggle="collapse" href="/delete-post/{{post.id}}" class="dropdown-item"
+            ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg></a>
+           
+          {% endif %}
+        </div>
     </div>
-    <br/ > {% endfor %}
+    </div>
+    <br/> 
+    {% endfor %}
   </div>
-  {% block footer %}
-  <div align="center">
-    <a href="/create-post"
-      ><button type="button" class="btn btn-primary btn-lg">
-        Create a Post
-      </button></a
-    >
-  </div>
-  {% endblock %} {% endblock %}
+   {% endblock %}
